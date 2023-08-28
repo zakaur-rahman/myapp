@@ -19,9 +19,15 @@ function App() {
       setError(null);
     } catch (error) {
       setError(error.response.data.error);
-      setData(null)
+      setData(null);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      getWeather();
     }
   };
 
@@ -31,6 +37,7 @@ function App() {
         <input
           value={location}
           onChange={(event) => setLocation(event.target.value)}
+          onKeyPress={handleKeyPress} 
           placeholder="Enter Location"
           type="text"
         />
@@ -40,7 +47,6 @@ function App() {
       </div>
 
       {error != null ? (
-        
         <h5 style={{ color: 'red', textAlign: 'center' }}>{error}</h5>
       ) : null}
 
@@ -51,54 +57,39 @@ function App() {
               <div className="spinner"></div>
             </div>
           ) : (
-            <div >
-
-            <div className="bottom" style={{ flexDirection: 'column' }}>
-              {data != null ? (
-                <>
-                  <h1>
-                    {data.city}, {data.country}
-                  </h1>
-                  <h1>{data.temp}°C</h1>
-                </>
-              ) : (
-                <>
-                  <h1>--</h1>
-                  <h1>--°C</h1>
-                </>
-              )}
+            <div>
+              <div className="location" style={{ flexDirection: 'column' }}>
+                {data != null ? (
+                  <p>{data.city}, {data.country}</p>
+                ) : null}
+              </div>
+              <div className="temp">
+                {data != null ? (
+                  <p className="tempt"> {data.temp}°C</p>
+                ) : null}
+              </div>
+              <div className="bottom">
+                <div className="feels">
+                  <p>Feels Like</p>
+                  {data != null ? (
+                    <p className="bold"> {data.feelslike}°C</p>
+                  ) : null}
+                </div>
+                <div className="humidity">
+                  <p>Humidity</p>
+                  {data != null ? (
+                    <p className="bold">{data.humidity}%</p>
+                  ) : null}
+                </div>
+                <div className="wind">
+                  <p>Condition</p>
+                  {data != null ? (
+                    <p className="bold">{data.condition}</p>
+                  ) : null}
+                </div>
+              </div>
             </div>
-
-          <div className="bottom">
-            <div className="feels">
-              {data != null ? (
-                <p className="bold">{data.feelslike}°C</p>
-              ) : (
-                <p className="bold">--°C</p>
-              )}
-              <p>Feels Like</p>
-            </div>
-            <div className="humidity">
-              {data != null ? (
-                <p className="bold">{data.humidity}%</p>
-              ) : (
-                <p className="bold">-- %</p>
-              )}
-              <p>Humidity</p>
-            </div>
-            <div className="wind">
-              {data != null ? (
-                <p className="bold">{data.condition}</p>
-              ) : (
-                <p className="bold">--</p>
-              )}
-              <p>Condition</p>
-            </div>
-          </div>
-          </div>
-
           )}
-          
         </div>
       </div>
     </div>
